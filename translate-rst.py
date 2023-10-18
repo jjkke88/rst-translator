@@ -73,20 +73,20 @@ def replace_chinese_with_english(text):
                 english_text = translate_chinese_to_english(cht_text)  
                 text = text.replace(cht_text, english_text)  
         else:
-            lst_tets = line.split(' ')
-            for lst_tet in lst_tets:
-                if contains_chinese(lst_tet):
-                    english_text = translate_chinese_to_english(lst_tet) 
-                    matches = re.findall(r'\`(.*?)\`', english_text)  
-                    # 在匹配到的内容前后插入空格
-                    for match in matches:  
-                        english_text = english_text.replace('`' + match + '`', '`' + match + '` ')
-                    text = text.replace(lst_tet, english_text)
-
+            if contains_chinese(line):
+                english_text = translate_chinese_to_english(line) 
+                matches = re.findall(r'\`(.*?)\`', english_text)
+                for match in matches:  
+                    english_text = english_text.replace('`' + match + '`', '`' + match + '` ')
+                    english_text = english_text.replace("----", "--------")
+                    english_text = english_text.replace("####", "########")
+                    english_text = english_text.replace("~~~~", "~~~~~~~~")
+                    english_text = english_text.replace("====", "========")
+                text = text.replace(line, english_text)
     return text
 
 if __name__ == "__main__":
-    path = "C:/Users/yupei.wu/Downloads/documents/docs-others"
+    path = "C:/Users/dongy/Downloads/documents/0415/docs-infer"
     # # For list of language codes, please refer to `https://api.fanyi.baidu.com/doc/21`
     from_lang = 'zh'
     to_lang =  'en'
@@ -112,6 +112,6 @@ if __name__ == "__main__":
         print(trans_content)
         # 存储
         base_name = os.path.basename(rst_file)
-        target_file_path = rst_file.replace("documents/docs-others", "documents/docs-others-trans")
+        target_file_path = rst_file.replace("0415/docs-infer", "0415/docs-en")
         with open(target_file_path, 'w', encoding="utf-8") as f2:
             f2.write(trans_content)
